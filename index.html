@@ -37,7 +37,7 @@
       font-size: 48px;
       font-weight: bold;
       font-family: 'Helvetica', Arial, sans-serif;
-      letter-spacing: 3px;
+      letter-spacing: 0.5px;
       color: #120a8f;
       margin-bottom: 10px;
     }
@@ -46,7 +46,7 @@
       font-size: 28px;
       font-family: 'Garamond', Georgia, serif;
       color: #120a8f;
-      letter-spacing: 2px;
+      letter-spacing: 0.5px;
     }
     
     /* GRID VIEW - główny widok z kafelkami */
@@ -60,6 +60,18 @@
     
     .grid-view.hidden {
       display: none;
+    }
+    
+    .info-tile {
+      padding: 20px 24px;
+      background: #f5f7ff;
+      border-bottom: 1px solid #120a8f;
+      text-align: center;
+      font-family: 'Helvetica', Arial, sans-serif;
+      color: #120a8f;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
     }
     
     .directors-grid {
@@ -170,10 +182,10 @@
     
     .back-button {
       position: absolute;
-      background: transparent;
-      border: none;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e0e0e0;
       color: #120a8f;
-      padding: 8px 0;
+      padding: 10px 16px;
       font-size: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -183,6 +195,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     
     .back-button::before {
@@ -192,7 +206,8 @@
     }
     
     .back-button:hover {
-      color: #1e1aa0;
+      background: #ffffff;
+      border-color: #120a8f;
     }
     
     .back-button:hover::before {
@@ -250,12 +265,12 @@
     @media (max-width: 768px) {
       .headline h1 {
         font-size: 28px;
-        letter-spacing: 2px;
+        letter-spacing: 0.5px;
       }
       
       .headline p {
         font-size: 20px;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
       }
       
       .grid-view {
@@ -309,6 +324,8 @@
   <!-- GRID VIEW -->
   <div class="grid-view" id="gridView">
     <div class="directors-grid">
+      <div class="info-tile">Co gramy</div>
+      
       <div class="director-card" data-director="lynch">
         <div class="director-card-name">David Lynch</div>
       </div>
