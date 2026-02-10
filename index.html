@@ -46,8 +46,8 @@
     /* GRID VIEW - główny widok z kafelkami */
     .grid-view {
       display: block;
-      padding: 60px 40px;
-      max-width: 1400px;
+      padding: 40px 0;
+      max-width: 480px;
       margin: 0 auto;
     }
     
@@ -56,45 +56,36 @@
     }
     
     .directors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      display: flex;
+      flex-direction: column;
+      background: #f2f2f2;
+      overflow: hidden;
     }
     
     .director-card {
-      background: #1a15a0;
-      border-radius: 12px;
-      overflow: hidden;
+      background: #f2f2f2;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border: 3px solid transparent;
-      position: relative;
-      aspect-ratio: 3/4;
+      border-bottom: 1px solid #d0d0d0;
     }
     
-    .director-card:hover {
-      transform: translateY(-8px);
-      border-color: #4d45ff;
-      box-shadow: 0 12px 40px rgba(77, 69, 255, 0.4);
-    }
-    
-    .director-card-image {
-      width: 100%;
-      height: 70%;
-      object-fit: cover;
-      display: block;
+    .director-card:last-child {
+      border-bottom: none;
     }
     
     .director-card-name {
-      padding: 20px;
-      font-size: 24px;
+      padding: 22px 24px;
+      font-size: 22px;
       font-weight: bold;
-      text-align: center;
-      background: linear-gradient(to top, #0a0654, #1a15a0);
-      height: 30%;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      font-family: 'Helvetica', Arial, sans-serif; /* Helvetica Bold */
+      color: #111;
+    }
+    
+    .director-card-name::after {
+      content: "›";
+      font-size: 20px;
     }
     
     /* DETAIL VIEW - pełnoekranowy widok szczegółów */
@@ -145,7 +136,7 @@
       left: 0;
       right: 0;
       padding: 40px;
-      background: linear-gradient(to top, #120a8f, transparent);
+      background: rgba(18, 10, 143, 0.9);
     }
     
     .detail-name {
@@ -160,12 +151,11 @@
       color: #ccc;
       max-width: 800px;
       line-height: 1.6;
+      font-family: 'Garamond', Georgia, serif; /* Garamond */
     }
     
     .back-button {
       position: absolute;
-      top: 30px;
-      left: 30px;
       background: rgba(10, 6, 84, 0.9);
       border: 2px solid #4d45ff;
       color: white;
@@ -175,17 +165,24 @@
       cursor: pointer;
       transition: all 0.3s ease;
       font-weight: bold;
+      z-index: 1001;
     }
     
     .back-button:hover {
       background: #4d45ff;
       transform: translateX(-5px);
     }
+
+    .back-button {
+      top: 30px;
+      left: 30px;
+    }
     
     .filmography {
       padding: 60px 40px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
     }
     
     .filmography-title {
@@ -200,14 +197,7 @@
       background: #1a15a0;
       padding: 25px 30px;
       margin-bottom: 20px;
-      border-radius: 10px;
       border-left: 4px solid #4d45ff;
-      transition: all 0.3s ease;
-    }
-    
-    .film-item:hover {
-      background: #2820d9;
-      transform: translateX(10px);
     }
     
     .film-year {
@@ -240,17 +230,13 @@
       }
       
       .grid-view {
-        padding: 30px 20px;
-      }
-      
-      .directors-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
+        padding: 10px 0 30px 0;
+        max-width: 414px;
       }
       
       .director-card-name {
         font-size: 20px;
-        padding: 15px;
+        padding: 24px 24px;
       }
       
       .detail-name {
@@ -296,27 +282,22 @@
   <div class="grid-view" id="gridView">
     <div class="directors-grid">
       <div class="director-card" data-director="lynch">
-        <img src="lynch.jpg" alt="David Lynch" class="director-card-image">
         <div class="director-card-name">David Lynch</div>
       </div>
       
       <div class="director-card" data-director="zulawski">
-        <img src="zulawski.jpg" alt="Andrzej Żuławski" class="director-card-image">
         <div class="director-card-name">Andrzej Żuławski</div>
       </div>
       
       <div class="director-card" data-director="tarantino">
-        <img src="tarantino.jpg" alt="Quentin Tarantino" class="director-card-image">
         <div class="director-card-name">Quentin Tarantino</div>
       </div>
       
       <div class="director-card" data-director="coppola">
-        <img src="Coppola.jpg" alt="Sofia Coppola" class="director-card-image">
         <div class="director-card-name">Sofia Coppola</div>
       </div>
       
       <div class="director-card" data-director="eggers">
-        <img src="Eggers.jpg" alt="Robert Eggers" class="director-card-image">
         <div class="director-card-name">Robert Eggers</div>
       </div>
     </div>
@@ -378,7 +359,6 @@
       },
       coppola: {
         name: "Sofia Coppola",
-        name: "Sofia Coppola",
         bio: "Amerykańska reżyserka i scenarzystka, córka Francisa Forda Coppoli. Tworzy intymne, subtelne filmy o kobiecym doświadczeniu, samotności i poszukiwaniu tożsamości.",
         image: "Coppola.jpg",
         films: [
@@ -410,20 +390,15 @@
     function showDirector(directorId) {
       try {
         const director = directors[directorId];
-        if (!director) {
-          throw new Error(`Brak danych dla reżysera: ${directorId}`);
-        }
+        if (!director) throw new Error(`Brak danych dla reżysera: ${directorId}`);
 
-        // Wypełnij dane
         document.getElementById('detailName').textContent = director.name;
         document.getElementById('detailBio').textContent = director.bio;
         document.getElementById('detailBackground').src = director.image;
         document.getElementById('detailBackground').alt = director.name;
 
-        // Wypełnij filmografię
         const filmographyList = document.getElementById('filmographyList');
         filmographyList.innerHTML = '';
-        
         director.films.forEach(film => {
           const filmItem = document.createElement('div');
           filmItem.className = 'film-item';
@@ -435,11 +410,10 @@
           filmographyList.appendChild(filmItem);
         });
 
-        // Pokaż widok szczegółów
         gridView.classList.add('hidden');
         detailView.classList.add('active');
         window.scrollTo(0, 0);
-        
+
       } catch (error) {
         console.error('Błąd wyświetlania reżysera:', error);
         alert('Nie udało się załadować informacji o reżyserze');
@@ -455,30 +429,21 @@
 
     // Event listenery
     directorCards.forEach(card => {
-      card.addEventListener('click', () => {
-        const directorId = card.getAttribute('data-director');
-        showDirector(directorId);
-      });
-      
-      // Dostępność klawiatury
+      card.addEventListener('click', () => showDirector(card.getAttribute('data-director')));
       card.setAttribute('tabindex', '0');
       card.setAttribute('role', 'button');
-      card.addEventListener('keypress', (e) => {
+      card.addEventListener('keypress', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          const directorId = card.getAttribute('data-director');
-          showDirector(directorId);
+          showDirector(card.getAttribute('data-director'));
         }
       });
     });
 
     backButton.addEventListener('click', showGrid);
 
-    // Obsługa ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && detailView.classList.contains('active')) {
-        showGrid();
-      }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && detailView.classList.contains('active')) showGrid();
     });
 
     console.log('Strona załadowana pomyślnie');
