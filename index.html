@@ -2,178 +2,233 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>Reżyserzy</title>
+  <title>Przegląd kina - Kino Muza</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { 
       box-sizing: border-box; 
-      font-family: Arial, Helvetica, sans-serif; 
+      margin: 0;
+      padding: 0;
     }
     
     body { 
-      margin: 0; 
+      font-family: Arial, Helvetica, sans-serif;
       background: #120a8f; 
       color: #f5f5f5; 
-      min-height: 100vh; 
-      display: flex;
-      flex-direction: column;
+      min-height: 100vh;
     }
     
+    /* HEADLINE */
     .headline {
       width: 100%;
       text-align: center;
-      padding: 40px 20px 20px 20px;
+      padding: 40px 20px;
       background: #0a0654;
-      border-bottom: 1px solid #1e1aa0;
+      border-bottom: 2px solid #1e1aa0;
     }
     
     .headline h1 {
-      margin: 0;
       font-size: 48px;
       font-weight: bold;
       font-family: 'Helvetica', Arial, sans-serif;
       letter-spacing: 3px;
       color: #fff;
+      margin-bottom: 10px;
     }
     
     .headline p {
-      margin: 10px 0 0 0;
       font-size: 28px;
       font-family: 'Garamond', Georgia, serif;
       color: #fff;
       letter-spacing: 2px;
     }
     
-    .container { 
-      display: flex; 
-      width: 100%; 
-      min-height: calc(100vh - 140px);
-      flex: 1;
-    }
-    
-    .left { 
-      width: 35%; 
-      display: flex; 
-      align-items: center; 
-      padding-left: 60px; 
-    }
-    
-    .tiles { 
-      position: relative; 
-    }
-    
-    .tile { 
-      padding: 14px 20px; 
-      margin: 10px 0; 
-      cursor: pointer; 
-      color: #777; 
-      font-size: 20px;
-      transition: color 0.3s ease;
-      user-select: none;
-    }
-    
-    .tile:hover {
-      color: #aaa;
-    }
-    
-    .tile.active { 
-      color: #fff; 
-    }
-    
-    .highlight { 
-      position: absolute; 
-      left: -20px; 
-      width: 4px; 
-      height: 48px; 
-      background: white; 
-      border-radius: 2px; 
-      transition: top 0.4s ease;
-      pointer-events: none;
-    }
-    
-    .right { 
-      width: 65%; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 40px;
-    }
-    
-    .info { 
-      display: none;
-      max-width: 700px; 
-      width: 100%;
-    }
-    
-    .info.active { 
+    /* GRID VIEW - główny widok z kafelkami */
+    .grid-view {
       display: block;
-      animation: fadeIn 0.3s ease;
+      padding: 60px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .grid-view.hidden {
+      display: none;
     }
     
-    .director-name { 
-      font-size: 42px; 
-      opacity: 0.15; 
-      margin-bottom: 20px;
+    .directors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .director-card {
+      background: #1a15a0;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+      position: relative;
+      aspect-ratio: 3/4;
+    }
+    
+    .director-card:hover {
+      transform: translateY(-8px);
+      border-color: #4d45ff;
+      box-shadow: 0 12px 40px rgba(77, 69, 255, 0.4);
+    }
+    
+    .director-card-image {
+      width: 100%;
+      height: 70%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .director-card-name {
+      padding: 20px;
+      font-size: 24px;
       font-weight: bold;
-      letter-spacing: 2px;
+      text-align: center;
+      background: linear-gradient(to top, #0a0654, #1a15a0);
+      height: 30%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
-    .timeline { 
-      border-left: 1px solid #1e1aa0; 
-      padding-left: 20px; 
-      position: relative;
+    /* DETAIL VIEW - pełnoekranowy widok szczegółów */
+    .detail-view {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #120a8f;
+      z-index: 1000;
+      overflow-y: auto;
+      animation: slideIn 0.4s ease;
     }
     
-    .film { 
-      margin-bottom: 20px; 
-      cursor: default; 
+    .detail-view.active {
+      display: block;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .detail-header {
       position: relative;
+      height: 50vh;
+      overflow: hidden;
+    }
+    
+    .detail-background {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.4);
+    }
+    
+    .detail-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px;
+      background: linear-gradient(to top, #120a8f, transparent);
+    }
+    
+    .detail-name {
+      font-size: 64px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-family: 'Helvetica', Arial, sans-serif;
+    }
+    
+    .detail-bio {
+      font-size: 18px;
+      color: #ccc;
+      max-width: 800px;
+      line-height: 1.6;
+    }
+    
+    .back-button {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      background: rgba(10, 6, 84, 0.9);
+      border: 2px solid #4d45ff;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    
+    .back-button:hover {
+      background: #4d45ff;
+      transform: translateX(-5px);
+    }
+    
+    .filmography {
+      padding: 60px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .filmography-title {
+      font-size: 36px;
+      margin-bottom: 40px;
+      font-weight: bold;
+      border-bottom: 2px solid #1e1aa0;
+      padding-bottom: 20px;
+    }
+    
+    .film-item {
+      background: #1a15a0;
+      padding: 25px 30px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border-left: 4px solid #4d45ff;
       transition: all 0.3s ease;
     }
     
-    .film:hover .title { 
-      color: white; 
+    .film-item:hover {
+      background: #2820d9;
+      transform: translateX(10px);
     }
     
-    .year { 
-      color: #777; 
-      font-size: 14px;
-      margin-bottom: 4px;
+    .film-year {
+      color: #aaa;
+      font-size: 16px;
+      margin-bottom: 8px;
     }
     
-    .title { 
-      font-size: 20px; 
-      transition: color 0.3s;
-      margin-bottom: 4px;
+    .film-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    
+    .film-runtime {
       color: #ccc;
+      font-size: 14px;
     }
     
-    .runtime { 
-      font-size: 14px; 
-      color: #aaa; 
-    }
-    
-    .error-message {
-      color: #ff6b6b;
-      padding: 10px;
-      text-align: center;
-      display: none;
-    }
-    
-    .error-message.show {
-      display: block;
-    }
-
+    /* RESPONSIVE */
     @media (max-width: 768px) {
-      body {
-        min-height: auto;
-      }
-      
       .headline h1 {
         font-size: 28px;
         letter-spacing: 2px;
@@ -183,95 +238,50 @@
         font-size: 20px;
         letter-spacing: 1px;
       }
-
-      .container {
-        flex-direction: column;
-        min-height: auto;
-      }
-
-      .left {
-        width: 100%;
-        padding: 30px 20px 20px 20px;
-        align-items: flex-start;
-        background: #0a0654;
-        border-bottom: 1px solid #1e1aa0;
+      
+      .grid-view {
+        padding: 30px 20px;
       }
       
-      .right {
-        width: 100%;
-        padding: 30px 20px 100px 20px;
-        align-items: flex-start;
-      }
-
-      .tiles {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .tile {
-        font-size: 15px;
-        margin: 0;
-        padding: 12px 16px;
-        text-align: center;
-        background: #1f2d3d;
-        border-radius: 8px;
-        border: 2px solid transparent;
-        transition: all 0.3s ease;
+      .directors-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
       }
       
-      .tile.active {
-        background: #2a3f5f;
-        border-color: #4a7ba7;
-      }
-
-      .highlight {
-        display: none;
-      }
-
-      .info {
-        position: relative;
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .director-name {
-        font-size: 32px;
-        text-align: left;
-        opacity: 0.12;
-        margin-bottom: 30px;
-      }
-
-      .timeline {
-        max-height: none;
-        overflow-y: visible;
-        padding-left: 16px;
-      }
-
-      .film { 
-        margin-bottom: 24px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid #2a3f5f;
+      .director-card-name {
+        font-size: 20px;
+        padding: 15px;
       }
       
-      .film:last-child {
-        border-bottom: none;
+      .detail-name {
+        font-size: 36px;
       }
       
-      .year {
-        font-size: 13px;
-        margin-bottom: 6px;
+      .detail-bio {
+        font-size: 16px;
       }
       
-      .title { 
-        font-size: 19px;
-        margin-bottom: 6px;
-        line-height: 1.3;
+      .detail-overlay {
+        padding: 20px;
       }
       
-      .runtime { 
-        font-size: 13px; 
+      .filmography {
+        padding: 40px 20px;
+      }
+      
+      .filmography-title {
+        font-size: 28px;
+      }
+      
+      .film-title {
+        font-size: 20px;
+      }
+      
+      .back-button {
+        top: 20px;
+        left: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
       }
     }
   </style>
@@ -281,222 +291,197 @@
     <h1>Przegląd kina</h1>
     <p>W Kinie Muza</p>
   </div>
-  
-  <div class="container">
-    <div class="left">
-      <div class="tiles">
-        <div class="highlight"></div>
-        <div class="tile active" data-index="0">David Lynch</div>
-        <div class="tile" data-index="1">Andrzej Żuławski</div>
-        <div class="tile" data-index="2">Quentin Tarantino</div>
-        <div class="tile" data-index="3">Sofia Coppola</div>
-        <div class="tile" data-index="4">Robert Eggers</div>
-      </div>
-    </div>
 
-    <div class="right">
-      <div class="error-message" id="errorMessage"></div>
-      
-      <div class="info active" data-director="lynch">
-        <div class="director-name">LYNCH</div>
-        <div class="timeline">
-          <div class="film"><div class="year">1977</div><div class="title">Eraserhead</div><div class="runtime">89 min</div></div>
-          <div class="film"><div class="year">1986</div><div class="title">Blue Velvet</div><div class="runtime">120 min</div></div>
-          <div class="film"><div class="year">1992</div><div class="title">Fire Walk with Me</div><div class="runtime">135 min</div></div>
-          <div class="film"><div class="year">2001</div><div class="title">Mulholland Drive</div><div class="runtime">147 min</div></div>
-        </div>
+  <!-- GRID VIEW -->
+  <div class="grid-view" id="gridView">
+    <div class="directors-grid">
+      <div class="director-card" data-director="lynch">
+        <img src="lynch.jpg" alt="David Lynch" class="director-card-image">
+        <div class="director-card-name">David Lynch</div>
       </div>
       
-      <div class="info" data-director="zulawski">
-        <div class="director-name">ŻUŁAWSKI</div>
-        <div class="timeline">
-          <div class="film"><div class="year">1971</div><div class="title">Trzecia część nocy</div><div class="runtime">116 min</div></div>
-          <div class="film"><div class="year">1981</div><div class="title">Opętanie</div><div class="runtime">124 min</div></div>
-          <div class="film"><div class="year">1988</div><div class="title">Na srebrnym globie</div><div class="runtime">166 min</div></div>
-          <div class="film"><div class="year">1996</div><div class="title">Szamanka</div><div class="runtime">130 min</div></div>
-        </div>
+      <div class="director-card" data-director="zulawski">
+        <img src="zulawski.jpg" alt="Andrzej Żuławski" class="director-card-image">
+        <div class="director-card-name">Andrzej Żuławski</div>
       </div>
       
-      <div class="info" data-director="tarantino">
-        <div class="director-name">TARANTINO</div>
-        <div class="timeline">
-          <div class="film"><div class="year">1992</div><div class="title">Reservoir Dogs</div><div class="runtime">99 min</div></div>
-          <div class="film"><div class="year">1994</div><div class="title">Pulp Fiction</div><div class="runtime">154 min</div></div>
-          <div class="film"><div class="year">2003</div><div class="title">Kill Bill Vol. 1</div><div class="runtime">111 min</div></div>
-          <div class="film"><div class="year">2012</div><div class="title">Django Unchained</div><div class="runtime">165 min</div></div>
-        </div>
+      <div class="director-card" data-director="tarantino">
+        <img src="tarantino.jpg" alt="Quentin Tarantino" class="director-card-image">
+        <div class="director-card-name">Quentin Tarantino</div>
       </div>
       
-      <div class="info" data-director="coppola">
-        <div class="director-name">COPPOLA</div>
-        <div class="timeline">
-          <div class="film"><div class="year">1999</div><div class="title">The Virgin Suicides</div><div class="runtime">97 min</div></div>
-          <div class="film"><div class="year">2003</div><div class="title">Lost in Translation</div><div class="runtime">102 min</div></div>
-          <div class="film"><div class="year">2006</div><div class="title">Marie Antoinette</div><div class="runtime">123 min</div></div>
-          <div class="film"><div class="year">2023</div><div class="title">Priscilla</div><div class="runtime">113 min</div></div>
-        </div>
+      <div class="director-card" data-director="coppola">
+        <img src="Coppola.jpg" alt="Sofia Coppola" class="director-card-image">
+        <div class="director-card-name">Sofia Coppola</div>
       </div>
       
-      <div class="info" data-director="eggers">
-        <div class="director-name">EGGERS</div>
-        <div class="timeline">
-          <div class="film"><div class="year">2015</div><div class="title">The Witch</div><div class="runtime">92 min</div></div>
-          <div class="film"><div class="year">2019</div><div class="title">The Lighthouse</div><div class="runtime">109 min</div></div>
-          <div class="film"><div class="year">2022</div><div class="title">The Northman</div><div class="runtime">137 min</div></div>
-        </div>
+      <div class="director-card" data-director="eggers">
+        <img src="Eggers.jpg" alt="Robert Eggers" class="director-card-image">
+        <div class="director-card-name">Robert Eggers</div>
       </div>
     </div>
   </div>
 
+  <!-- DETAIL VIEW -->
+  <div class="detail-view" id="detailView">
+    <button class="back-button" id="backButton">← Powrót</button>
+    
+    <div class="detail-header">
+      <img id="detailBackground" src="" alt="" class="detail-background">
+      <div class="detail-overlay">
+        <div class="detail-name" id="detailName"></div>
+        <div class="detail-bio" id="detailBio"></div>
+      </div>
+    </div>
+    
+    <div class="filmography">
+      <div class="filmography-title">Filmografia</div>
+      <div id="filmographyList"></div>
+    </div>
+  </div>
+
   <script>
-    // Error handling wrapper
-    function handleError(error, context) {
-      console.error(`Błąd w ${context}:`, error);
-      const errorElement = document.getElementById('errorMessage');
-      if (errorElement) {
-        errorElement.textContent = `Wystąpił problem: ${error.message}`;
-        errorElement.classList.add('show');
-        setTimeout(() => {
-          errorElement.classList.remove('show');
-        }, 5000);
+    // Dane reżyserów
+    const directors = {
+      lynch: {
+        name: "David Lynch",
+        bio: "Amerykański reżyser, scenarzysta i artysta wizualny. Mistrz surrealizmu i kina autorskiego, twórca kultowych dzieł pełnych symboliki i onirycznej atmosfery.",
+        image: "lynch.jpg",
+        films: [
+          { year: 1977, title: "Eraserhead", runtime: "89 min" },
+          { year: 1986, title: "Blue Velvet", runtime: "120 min" },
+          { year: 1992, title: "Fire Walk with Me", runtime: "135 min" },
+          { year: 2001, title: "Mulholland Drive", runtime: "147 min" }
+        ]
+      },
+      zulawski: {
+        name: "Andrzej Żuławski",
+        bio: "Polski reżyser i scenarzysta, jeden z najważniejszych twórców kina artystycznego. Znany z intensywnych, emocjonalnych filmów balansujących na granicy szaleństwa i geniuszu.",
+        image: "zulawski.jpg",
+        films: [
+          { year: 1971, title: "Trzecia część nocy", runtime: "116 min" },
+          { year: 1981, title: "Opętanie", runtime: "124 min" },
+          { year: 1988, title: "Na srebrnym globie", runtime: "166 min" },
+          { year: 1996, title: "Szamanka", runtime: "130 min" }
+        ]
+      },
+      tarantino: {
+        name: "Quentin Tarantino",
+        bio: "Amerykański reżyser, scenarzysta i aktor. Rewolucjonista kina lat 90., znany z charakterystycznych dialogów, nielinearnej narracji i hołdów dla kina gatunkowego.",
+        image: "tarantino.jpg",
+        films: [
+          { year: 1992, title: "Reservoir Dogs", runtime: "99 min" },
+          { year: 1994, title: "Pulp Fiction", runtime: "154 min" },
+          { year: 2003, title: "Kill Bill Vol. 1", runtime: "111 min" },
+          { year: 2012, title: "Django Unchained", runtime: "165 min" }
+        ]
+      },
+      coppola: {
+        name: "Sofia Coppola",
+        name: "Sofia Coppola",
+        bio: "Amerykańska reżyserka i scenarzystka, córka Francisa Forda Coppoli. Tworzy intymne, subtelne filmy o kobiecym doświadczeniu, samotności i poszukiwaniu tożsamości.",
+        image: "Coppola.jpg",
+        films: [
+          { year: 1999, title: "The Virgin Suicides", runtime: "97 min" },
+          { year: 2003, title: "Lost in Translation", runtime: "102 min" },
+          { year: 2006, title: "Marie Antoinette", runtime: "123 min" },
+          { year: 2023, title: "Priscilla", runtime: "113 min" }
+        ]
+      },
+      eggers: {
+        name: "Robert Eggers",
+        bio: "Amerykański reżyser i scenarzysta, mistrz gotyckiego horroru i kina historycznego. Znany z drobiazgowej dbałości o detale i autentyczność historyczną swoich wizji.",
+        image: "Eggers.jpg",
+        films: [
+          { year: 2015, title: "The Witch", runtime: "92 min" },
+          { year: 2019, title: "The Lighthouse", runtime: "109 min" },
+          { year: 2022, title: "The Northman", runtime: "137 min" }
+        ]
       }
-    }
+    };
 
-    // Safe DOM query selector
-    function safeQuerySelector(selector, context = 'DOM') {
+    // Elementy DOM
+    const gridView = document.getElementById('gridView');
+    const detailView = document.getElementById('detailView');
+    const backButton = document.getElementById('backButton');
+    const directorCards = document.querySelectorAll('.director-card');
+
+    // Funkcja pokazująca szczegóły reżysera
+    function showDirector(directorId) {
       try {
-        const element = document.querySelector(selector);
-        if (!element) {
-          throw new Error(`Element ${selector} nie został znaleziony`);
+        const director = directors[directorId];
+        if (!director) {
+          throw new Error(`Brak danych dla reżysera: ${directorId}`);
         }
-        return element;
-      } catch (error) {
-        handleError(error, context);
-        return null;
-      }
-    }
 
-    // Safe DOM query selector all
-    function safeQuerySelectorAll(selector, context = 'DOM') {
-      try {
-        const elements = document.querySelectorAll(selector);
-        if (elements.length === 0) {
-          console.warn(`Brak elementów pasujących do ${selector}`);
-        }
-        return elements;
-      } catch (error) {
-        handleError(error, context);
-        return [];
-      }
-    }
+        // Wypełnij dane
+        document.getElementById('detailName').textContent = director.name;
+        document.getElementById('detailBio').textContent = director.bio;
+        document.getElementById('detailBackground').src = director.image;
+        document.getElementById('detailBackground').alt = director.name;
 
-    // Initialize elements
-    const tiles = safeQuerySelectorAll('.tile');
-    const highlight = safeQuerySelector('.highlight');
-    const infos = safeQuerySelectorAll('.info');
-
-    // Validate initialization
-    if (tiles.length === 0 || !highlight || infos.length === 0) {
-      console.error('Nie udało się zainicjalizować wszystkich elementów');
-    }
-
-    // Move highlight with error handling
-    function moveHighlight(index) {
-      try {
-        if (!tiles[index]) {
-          throw new Error(`Tile o indeksie ${index} nie istnieje`);
-        }
-        if (!highlight) {
-          throw new Error('Element highlight nie istnieje');
-        }
+        // Wypełnij filmografię
+        const filmographyList = document.getElementById('filmographyList');
+        filmographyList.innerHTML = '';
         
-        const offsetTop = tiles[index].offsetTop;
-        highlight.style.top = `${offsetTop}px`;
-      } catch (error) {
-        handleError(error, 'moveHighlight');
-      }
-    }
-
-    // Switch director view
-    function switchDirector(index) {
-      try {
-        // Validate index
-        if (index < 0 || index >= tiles.length || index >= infos.length) {
-          throw new Error(`Nieprawidłowy indeks: ${index}`);
-        }
-
-        // Remove active classes
-        const activeTile = document.querySelector('.tile.active');
-        const activeInfo = document.querySelector('.info.active');
-        
-        if (activeTile) {
-          activeTile.classList.remove('active');
-        }
-        if (activeInfo) {
-          activeInfo.classList.remove('active');
-        }
-
-        // Add active classes
-        tiles[index].classList.add('active');
-        infos[index].classList.add('active');
-
-        // Move highlight
-        moveHighlight(index);
-      } catch (error) {
-        handleError(error, 'switchDirector');
-      }
-    }
-
-    // Add click handlers with error handling
-    tiles.forEach((tile, index) => {
-      try {
-        tile.addEventListener('click', () => {
-          switchDirector(index);
+        director.films.forEach(film => {
+          const filmItem = document.createElement('div');
+          filmItem.className = 'film-item';
+          filmItem.innerHTML = `
+            <div class="film-year">${film.year}</div>
+            <div class="film-title">${film.title}</div>
+            <div class="film-runtime">${film.runtime}</div>
+          `;
+          filmographyList.appendChild(filmItem);
         });
+
+        // Pokaż widok szczegółów
+        gridView.classList.add('hidden');
+        detailView.classList.add('active');
+        window.scrollTo(0, 0);
         
-        // Add keyboard accessibility
-        tile.setAttribute('tabindex', '0');
-        tile.setAttribute('role', 'button');
-        tile.setAttribute('aria-label', `Wybierz reżysera ${tile.textContent}`);
-        
-        tile.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            switchDirector(index);
-          }
-        });
       } catch (error) {
-        handleError(error, `tile event listener ${index}`);
+        console.error('Błąd wyświetlania reżysera:', error);
+        alert('Nie udało się załadować informacji o reżyserze');
+      }
+    }
+
+    // Funkcja powrotu do siatki
+    function showGrid() {
+      detailView.classList.remove('active');
+      gridView.classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    // Event listenery
+    directorCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const directorId = card.getAttribute('data-director');
+        showDirector(directorId);
+      });
+      
+      // Dostępność klawiatury
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const directorId = card.getAttribute('data-director');
+          showDirector(directorId);
+        }
+      });
+    });
+
+    backButton.addEventListener('click', showGrid);
+
+    // Obsługa ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && detailView.classList.contains('active')) {
+        showGrid();
       }
     });
 
-    // Initialize highlight position
-    try {
-      moveHighlight(0);
-    } catch (error) {
-      handleError(error, 'initial highlight');
-    }
-
-    // Add window resize handler for responsive highlight
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        try {
-          const activeIndex = Array.from(tiles).findIndex(tile => 
-            tile.classList.contains('active')
-          );
-          if (activeIndex !== -1) {
-            moveHighlight(activeIndex);
-          }
-        } catch (error) {
-          handleError(error, 'resize handler');
-        }
-      }, 250);
-    });
-
-    // Log initialization success
-    console.log('Strona z reżyserami załadowana pomyślnie');
+    console.log('Strona załadowana pomyślnie');
   </script>
 </body>
 </html>
