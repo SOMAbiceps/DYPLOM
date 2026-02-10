@@ -159,65 +159,108 @@
     }
 
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
+      body {
+        min-height: auto;
       }
 
-      .left, .right {
+      .container {
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .left {
         width: 100%;
-        padding: 20px;
+        padding: 30px 20px 20px 20px;
+        align-items: flex-start;
+        background: #0f0f0f;
+        border-bottom: 1px solid #333;
       }
       
-      .left {
-        padding-left: 20px;
+      .right {
+        width: 100%;
+        padding: 30px 20px 100px 20px;
+        align-items: flex-start;
       }
 
       .tiles {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
       }
 
       .tile {
-        font-size: 16px;
-        margin: 8px;
-        padding: 10px 15px;
+        font-size: 15px;
+        margin: 0;
+        padding: 12px 16px;
+        text-align: center;
+        background: #262626;
+        border-radius: 8px;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+      
+      .tile.active {
+        background: #333;
+        border-color: #fff;
       }
 
       .highlight {
         display: none;
       }
 
+      .info {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+      }
+
       .director-name {
-        font-size: 28px;
-        text-align: center;
-        opacity: 0.1;
+        font-size: 32px;
+        text-align: left;
+        opacity: 0.12;
+        margin-bottom: 30px;
       }
 
       .timeline {
-        max-height: 400px;
-        overflow-y: auto;
+        max-height: none;
+        overflow-y: visible;
+        padding-left: 16px;
       }
 
       .film { 
-        margin-bottom: 15px; 
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #222;
+      }
+      
+      .film:last-child {
+        border-bottom: none;
+      }
+      
+      .year {
+        font-size: 13px;
+        margin-bottom: 6px;
       }
       
       .title { 
-        font-size: 18px; 
+        font-size: 19px;
+        margin-bottom: 6px;
+        line-height: 1.3;
       }
       
-      .runtime, .year { 
-        font-size: 12px; 
+      .runtime { 
+        font-size: 13px; 
       }
       
       .qr {
-        bottom: 10px;
-        right: 10px;
+        bottom: 15px;
+        right: 15px;
+        padding: 8px;
       }
       
       .qr img {
-        max-width: 100px;
+        max-width: 80px;
       }
     }
   </style>
