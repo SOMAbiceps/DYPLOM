@@ -5,10 +5,19 @@
   <title>Przegląd kina - Kino Muza</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * { 
+  * { 
       box-sizing: border-box; 
       margin: 0;
       padding: 0;
+    }
+    
+    :root {
+      --bg-cinema: #050816;
+      --card-bg: #121a3a;
+      --text-main: #f5f5f5;
+      --text-muted: #e3d7ff;
+      --accent: #ffb347;
+      --border-soft: rgba(255,255,255,0.18);
     }
     
     html, body {
@@ -17,45 +26,109 @@
     
     body { 
       font-family: Arial, Helvetica, sans-serif;
-      background: #ffffff; 
-      color: #120a8f; 
+      background: var(--bg-cinema); /* ciemna sala kinowa */
+      color: var(--text-main); 
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
     
     /* HEADLINE */
     .headline {
       width: 100%;
-      text-align: center;
-      padding: 40px 20px;
-      background: #ffffff;
-      border-bottom: 2px solid #120a8f;
+      padding: 32px 20px 14px;
+      background: var(--bg-cinema);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: center;
     }
     
     .headline h1 {
-      font-size: 48px;
+      font-size: 34px;
       font-weight: bold;
       font-family: 'Helvetica', Arial, sans-serif;
-      letter-spacing: 0.5px;
-      color: #120a8f;
-      margin-bottom: 10px;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      margin-bottom: 4px;
     }
     
     .headline p {
-      font-size: 28px;
+      font-size: 18px;
       font-family: 'Garamond', Georgia, serif;
-      color: #120a8f;
+      color: var(--text-muted);
       letter-spacing: 0.5px;
+    }
+    
+    .headline-inner {
+      max-width: 960px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .intro {
+      max-width: 960px;
+      margin: 20px auto 36px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+      gap: 32px;
+      align-items: flex-start;
+      font-family: 'Garamond', Georgia, serif;
+      line-height: 1.7;
+      font-size: 17px;
+      color: var(--text-muted);
+    }
+    
+    .intro-address {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 10px;
+      background: transparent;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.65);
+    }
+    
+    .intro-label {
+      font-family: 'Helvetica', Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1.6px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+    
+    .intro-address-main {
+      font-family: 'Helvetica', Arial, sans-serif;
+      font-size: 16px;
+    }
+    
+    .intro-address-main span {
+      display: block;
+    }
+    
+    .intro-description {
+      max-width: 560px;
+    }
+    
+    .intro-description p {
+      margin-bottom: 10px;
+    }
+    
+    .intro-description p:last-child {
+      margin-bottom: 0;
     }
     
     /* GRID VIEW - główny widok z kafelkami */
     .grid-view {
       flex: 1;
-      display: flex;
-      padding: 0;
       width: 100%;
-      max-width: none;
+      max-width: 1200px;
+      margin: 8px auto 48px;
+      padding: 0 20px;
+      display: flex;
+      align-items: stretch;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 28px;
     }
     
     .grid-view.hidden {
@@ -63,57 +136,64 @@
     }
     
     .info-tile {
-      padding: 40px 24px;
-      background: #ffffff;
-      border-bottom: 2px solid #120a8f;
-      text-align: center;
-      font-family: 'Helvetica', Arial, sans-serif;
-      color: #120a8f;
-      font-size: 48px;
-      font-weight: bold;
-      letter-spacing: 0.5px;
+      display: none;
     }
     
     .directors-grid {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      background: #ffffff;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 20px;
+      width: 100%;
     }
     
     .director-card {
-      flex: 1;
-      background: #ffffff;
+      background: var(--card-bg); /* ciemny ultramarynowy jak ekran */
       cursor: pointer;
-      border-bottom: 1px solid #120a8f;
-      transition: background-color 0.2s ease;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      min-height: 260px;
+      border-radius: 10px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.7);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
     
     .director-card:hover {
-      background: #f5f7ff;
-    }
-    
-    .director-card:last-child {
-      border-bottom: none;
+      transform: translateY(-6px);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.9);
+      border-color: rgba(255,255,255,0.5);
     }
     
     .director-card-name {
-      padding: 22px 30px;
-      font-size: 64px;
-      font-weight: bold;
+      padding: 20px 18px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       justify-content: space-between;
       font-family: 'Helvetica', Arial, sans-serif;
-      color: #120a8f;
-      line-height: 1;
+      color: #ffffff;
+      width: 100%;
+      row-gap: 8px;
+    }
+    
+    .director-name {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+    
+    .director-dates {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
     }
     
     .director-card-name::after {
-      content: "›";
-      font-size: 72px;
-      color: #120a8f;
-      line-height: 1;
+      content: "";
     }
     
     /* DETAIL VIEW - pełnoekranowy widok szczegółów */
@@ -124,7 +204,7 @@
       left: 0;
       width: 100%;
       height: 100vh;
-      background: #ffffff;
+      background: var(--bg-cinema);
       z-index: 1000;
       overflow-y: auto;
       animation: slideIn 0.4s ease;
@@ -163,7 +243,7 @@
       left: 0;
       right: 0;
       padding: 40px;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(5, 8, 22, 0.96);
     }
     
     .detail-name {
@@ -171,12 +251,12 @@
       font-weight: bold;
       margin-bottom: 10px;
       font-family: 'Helvetica', Arial, sans-serif;
-      color: #120a8f;
+      color: var(--text-main);
     }
     
     .detail-bio {
       font-size: 18px;
-      color: #333;
+      color: var(--text-muted);
       max-width: 800px;
       line-height: 1.6;
       font-family: 'Garamond', Georgia, serif;
@@ -184,9 +264,9 @@
     
     .back-button {
       position: absolute;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid #e0e0e0;
-      color: #120a8f;
+      background: rgba(5, 8, 22, 0.95);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #f5f5f5;
       padding: 10px 16px;
       font-size: 15px;
       cursor: pointer;
@@ -198,7 +278,7 @@
       align-items: center;
       gap: 6px;
       border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     }
     
     .back-button::before {
@@ -208,8 +288,8 @@
     }
     
     .back-button:hover {
-      background: #ffffff;
-      border-color: #120a8f;
+      background: #0b1126;
+      border-color: #f5f5f5;
     }
     
     .back-button:hover::before {
@@ -238,15 +318,15 @@
     }
     
     .film-item {
-      background: #f5f7ff;
+      background: #0b1126;
       padding: 25px 30px;
       margin-bottom: 20px;
-      border-left: 4px solid #120a8f;
+      border-left: 4px solid #e3d7ff;
       border-radius: 4px;
     }
     
     .film-year {
-      color: #666;
+      color: #b0b3c5;
       font-size: 16px;
       margin-bottom: 8px;
     }
@@ -255,42 +335,54 @@
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 6px;
-      color: #120a8f;
+      color: #ffffff;
     }
     
     .film-runtime {
-      color: #888;
+      color: #b0b3c5;
       font-size: 14px;
     }
     
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .headline h1 {
-        font-size: 28px;
+        font-size: 24px;
         letter-spacing: 0.5px;
       }
       
       .headline p {
-        font-size: 20px;
-        letter-spacing: 0.5px;
+        font-size: 16px;
+      }
+      
+      .intro {
+        margin: 16px auto 24px;
+        padding: 0 20px;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+        font-size: 15px;
+      }
+      
+      .intro-address {
+        padding: 14px 16px;
+        border-radius: 8px;
       }
       
       .grid-view {
-        padding: 0;
+        padding: 0 16px 32px;
       }
       
-      .info-tile {
-        font-size: 28px;
-        padding: 30px 20px;
+      .directors-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      
+      .director-card {
+        min-height: 210px;
       }
       
       .director-card-name {
-        font-size: 28px;
-        padding: 24px 24px;
-      }
-      
-      .director-card-name::after {
-        font-size: 36px;
+        font-size: 18px;
+        padding: 18px 14px;
       }
       
       .detail-name {
@@ -328,33 +420,63 @@
 </head>
 <body>
   <div class="headline">
-    <h1>Przegląd kina</h1>
-    <p>W Kinie Muza</p>
+    <div class="headline-inner">
+      <h1>Przegląd kina</h1>
+      <p>W Kinie Muza</p>
+    </div>
+  </div>
+
+  <div class="intro">
+    <div class="intro-address">
+      <div class="intro-label">Kino Muza</div>
+      <div class="intro-address-main">
+        <span>Święty Marcin 30</span>
+        <span>61-806 Poznań</span>
+      </div>
+    </div>
+    <div class="intro-description">
+      <p>Przegląd Kina to cykl wyjątkowych spotkań z filmem w Kinie Muza. W ramach serii prezentujemy starannie wybrane produkcje – od klasyki światowego kina po mniej oczywiste perełki.</p>
+      <p>Każde spotkanie to okazja, by zobaczyć film na dużym ekranie, odkryć nowe perspektywy i porozmawiać o kinie w inspirującej atmosferze. Przegląd Kina to przestrzeń dla wszystkich miłośników filmu – zarówno tych, którzy dopiero zaczynają swoją przygodę z ambitnym repertuarem, jak i dla doświadczonych kinomanów.</p>
+      <p>Zapraszamy na wspólne seanse i odkrywanie kina na nowo.</p>
+    </div>
   </div>
 
   <!-- GRID VIEW -->
   <div class="grid-view" id="gridView">
     <div class="directors-grid">
-      <div class="info-tile">Co gramy</div>
-      
       <div class="director-card" data-director="lynch">
-        <div class="director-card-name">David Lynch</div>
+        <div class="director-card-name">
+          <span class="director-name">David Lynch</span>
+          <span class="director-dates">12–14.08</span>
+        </div>
       </div>
       
       <div class="director-card" data-director="zulawski">
-        <div class="director-card-name">Andrzej Żuławski</div>
+        <div class="director-card-name">
+          <span class="director-name">Andrzej Żuławski</span>
+          <span class="director-dates">8–10.09</span>
+        </div>
       </div>
       
       <div class="director-card" data-director="tarantino">
-        <div class="director-card-name">Quentin Tarantino</div>
+        <div class="director-card-name">
+          <span class="director-name">Quentin Tarantino</span>
+          <span class="director-dates">14–17.10</span>
+        </div>
       </div>
       
       <div class="director-card" data-director="coppola">
-        <div class="director-card-name">Sofia Coppola</div>
+        <div class="director-card-name">
+          <span class="director-name">Sofia Coppola</span>
+          <span class="director-dates">10–12.11</span>
+        </div>
       </div>
       
       <div class="director-card" data-director="eggers">
-        <div class="director-card-name">Robert Eggers</div>
+        <div class="director-card-name">
+          <span class="director-name">Robert Eggers</span>
+          <span class="director-dates">11–13.12</span>
+        </div>
       </div>
     </div>
   </div>
@@ -372,7 +494,7 @@
     </div>
     
     <div class="filmography">
-      <div class="filmography-title">Filmografia</div>
+      <div class="filmography-title">Repertuar</div>
       <div id="filmographyList"></div>
     </div>
   </div>
@@ -382,56 +504,67 @@
     const directors = {
       lynch: {
         name: "David Lynch",
-        bio: "Amerykański reżyser, scenarzysta i artysta wizualny. Mistrz surrealizmu i kina autorskiego, twórca kultowych dzieł pełnych symboliki i onirycznej atmosfery.",
+        bio: "Amerykański reżyser, scenarzysta, malarz i muzyk, ikona surrealizmu w kinie. Znany z tworzenia onirycznych, tajemniczych i psychologicznych thrillerów, takich jak „Twin Peaks”, „Mulholland Drive” czy „Blue Velvet”. Jego twórczość często eksploruje mroczne zakamarki amerykańskiej prowincji i ludzkiej podświadomości. \n\nPrzegląd: 12–14.08",
         image: "lynch.jpg",
         films: [
-          { year: 1977, title: "Eraserhead", runtime: "89 min" },
-          { year: 1986, title: "Blue Velvet", runtime: "120 min" },
-          { year: 1992, title: "Fire Walk with Me", runtime: "135 min" },
-          { year: 2001, title: "Mulholland Drive", runtime: "147 min" }
+          { year: "12.08.26", title: "Eraserhead", runtime: "16:30 • sala 1" },
+          { year: "12.08.26", title: "Lost Highway", runtime: "19:00 • sala 2" },
+          { year: "13.08.26", title: "Twin Peaks", runtime: "17:00 • sala 2" },
+          { year: "13.08.26", title: "Blue Velvet", runtime: "20:00 • sala 2" },
+          { year: "14.08.26", title: "Dune", runtime: "16:00 • sala 1" },
+          { year: "14.08.26", title: "Wild at Heart", runtime: "19:30 • sala 1" }
         ]
       },
       zulawski: {
         name: "Andrzej Żuławski",
-        bio: "Polski reżyser i scenarzysta, jeden z najważniejszych twórców kina artystycznego. Znany z intensywnych, emocjonalnych filmów balansujących na granicy szaleństwa i geniuszu.",
+        bio: "Polski reżyser, scenarzysta i pisarz, znany z bezkompromisowego kina pełnego histerii, psychoseksualnych napięć i manierycznej gry aktorskiej. Jego twórczość, często balansująca na granicy horroru i dramatu, eksploruje destrukcyjne emocje. \n\nPrzegląd: 8–10.09",
         image: "zulawski.jpg",
         films: [
-          { year: 1971, title: "Trzecia część nocy", runtime: "116 min" },
-          { year: 1981, title: "Opętanie", runtime: "124 min" },
-          { year: 1988, title: "Na srebrnym globie", runtime: "166 min" },
-          { year: 1996, title: "Szamanka", runtime: "130 min" }
+          { year: "08.09.26", title: "On the Silver Globe", runtime: "19:00 • sala 2" },
+          { year: "08.09.26", title: "Trzecia część nocy", runtime: "22:20 • sala 2" },
+          { year: "09.09.26", title: "Cosmos", runtime: "18:00 • sala 1" },
+          { year: "09.09.26", title: "Fidelity", runtime: "21:30 • sala 2" },
+          { year: "10.09.26", title: "Possession", runtime: "20:00 • sala 1" }
         ]
       },
       tarantino: {
         name: "Quentin Tarantino",
-        bio: "Amerykański reżyser, scenarzysta i aktor. Rewolucjonista kina lat 90., znany z charakterystycznych dialogów, nielinearnej narracji i hołdów dla kina gatunkowego.",
+        bio: "Amerykański reżyser, scenarzysta i aktor, uważany za jednego z najważniejszych twórców współczesnego postmodernizmu filmowego. Znany z brutalności, błyskotliwych dialogów, nielinearnej narracji oraz pastiszowych nawiązań do popkultury. \n\nPrzegląd: 14–17.10",
         image: "tarantino.jpg",
         films: [
-          { year: 1992, title: "Reservoir Dogs", runtime: "99 min" },
-          { year: 1994, title: "Pulp Fiction", runtime: "154 min" },
-          { year: 2003, title: "Kill Bill Vol. 1", runtime: "111 min" },
-          { year: 2012, title: "Django Unchained", runtime: "165 min" }
+          { year: "14.10.26", title: "Once Upon a Time in Hollywood", runtime: "18:00 • sala 1" },
+          { year: "14.10.26", title: "Reservoir Dogs", runtime: "21:00 • sala 2" },
+          { year: "14.10.26", title: "Kill Bill Vol. 1", runtime: "22:15 • sala 1" },
+          { year: "15.10.26", title: "Kill Bill Vol. 2", runtime: "17:00 • sala 1" },
+          { year: "15.10.26", title: "Django", runtime: "20:30 • sala 1" },
+          { year: "16.10.26", title: "Sin City", runtime: "18:45 • sala 2" },
+          { year: "16.10.26", title: "The Hateful Eight", runtime: "19:30 • sala 1" },
+          { year: "17.10.26", title: "Pulp Fiction", runtime: "20:00 • sala 1" }
         ]
       },
       coppola: {
         name: "Sofia Coppola",
-        bio: "Amerykańska reżyserka i scenarzystka, córka Francisa Forda Coppoli. Tworzy intymne, subtelne filmy o kobiecym doświadczeniu, samotności i poszukiwaniu tożsamości.",
+        bio: "Uznana amerykańska reżyserka, scenarzystka i producentka, córka Francisa Forda Coppoli, znana z autorskiego, nastrojowego kina skupionego na psychologii postaci, izolacji i kobiecej perspektywie, często określana jako mistrzyni subtelności. \n\nPrzegląd: 10–12.11",
         image: "Coppola.jpg",
         films: [
-          { year: 1999, title: "The Virgin Suicides", runtime: "97 min" },
-          { year: 2003, title: "Lost in Translation", runtime: "102 min" },
-          { year: 2006, title: "Marie Antoinette", runtime: "123 min" },
-          { year: 2023, title: "Priscilla", runtime: "113 min" }
+          { year: "09.11.26", title: "Priscilla", runtime: "18:00 • sala 1" },
+          { year: "09.11.26", title: "The Beguiled", runtime: "21:30 • sala 2" },
+          { year: "10.11.26", title: "Somewhere", runtime: "20:00 • sala 1" },
+          { year: "10.11.26", title: "The Virgin Suicides", runtime: "20:00 • sala 1" },
+          { year: "08.11.26", title: "Marie Antoinette", runtime: "19:00 • sala 2" },
+          { year: "08.11.26", title: "Lost in Translation", runtime: "22:20 • sala 2" }
         ]
       },
       eggers: {
         name: "Robert Eggers",
-        bio: "Amerykański reżyser i scenarzysta, mistrz gotyckiego horroru i kina historycznego. Znany z drobiazgowej dbałości o detale i autentyczność historyczną swoich wizji.",
+        bio: "Amerykański reżyser, scenarzysta i scenograf, specjalizujący się w kinie historycznym z elementami baśni i pogańskich wierzeń. Jego filmy charakteryzuje dbałość o szczegóły epoki, w tym użycie autentycznego, starodawnego języka dialogów. \n\nPrzegląd: 11–13.12",
         image: "Eggers.jpg",
         films: [
-          { year: 2015, title: "The Witch", runtime: "92 min" },
-          { year: 2019, title: "The Lighthouse", runtime: "109 min" },
-          { year: 2022, title: "The Northman", runtime: "137 min" }
+          { year: "11.12.26", title: "Nosferatu", runtime: "18:15 • sala 2" },
+          { year: "11.12.26", title: "The Northman", runtime: "19:50 • sala 1" },
+          { year: "12.12.26", title: "The Lighthouse", runtime: "17:00 • sala 2" },
+          { year: "13.12.26", title: "The Tell-Tale Heart", runtime: "18:00 • sala 1" },
+          { year: "13.12.26", title: "The Witch", runtime: "19:10 • sala 1" }
         ]
       }
     };
